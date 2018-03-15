@@ -1,4 +1,4 @@
-#include struct.h
+#include "../the_headers/struct.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -14,8 +14,10 @@ int main (int argc, char *argv[]) {
       exit(0); // Arret du programme
   }
 
-  int P3;
-  int P = fscanf(fichier, "%d", &P3);
+  char typeimg;
+  typeimg = (char)fgetc(fichier);
+  printf("%c", typeimg);
+  //int P    = fscanf(fichier, "%d", &P3);
 
 
   return 0;
