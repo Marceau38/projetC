@@ -26,6 +26,7 @@ int main (int argc, char *argv[]) {
 
   struct structimg image;
 
+//On commence par charger le type
 if (typetest[1] == '3') {
   image.typeimg = P3;
   printf("%d\n", image.typeimg);
