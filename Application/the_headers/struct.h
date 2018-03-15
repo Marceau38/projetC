@@ -10,3 +10,6 @@ struct structimg {
   int vmax; /// Valeur maximale d'une donnée d'un pixel
   uint64_t* pixel; // Tableau dynamique stockant les données de l'image
 };
+
+// struct p3top2(struct p3);
+// struct p3top1(struct p3);
