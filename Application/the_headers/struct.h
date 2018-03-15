@@ -1,7 +1,7 @@
 #include <stdint.h>
 
 typedef enum type type;
-enum type {P1, P2, P3};
+enum type {P1=1, P2=2, P3=3};
 
 struct structimg {
   enum type typeimg;/// Défini si c'est une image P1=1 ou P2=2 ou P3=3
