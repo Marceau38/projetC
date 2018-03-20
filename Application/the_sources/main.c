@@ -44,6 +44,26 @@ else {
   exit(0);
 }
 
+
+// On stocke maintenant le nombre de Colonnes et de Lignes :
+fscanf(fichier, "%d %d", &image.largeur, &image.hauteur);
+printf("Largeur=%d Hauteur=%d\n", image.largeur, image.hauteur);
+
+// On stocke Vmax :
+fscanf(fichier, "%d", &image.vmax);
+printf("Vmax = %d\n", image.vmax);
+
+// On stocke toutes les données dans un tableau : pixel
+image.pixel = malloc(((image.largeur*3)*image.hauteur)*sizeof(uint64_t)); // Il y a largeur*3 nb/ligne et hauteur nb/colonne
+int a = 0; // Valeur à placer
+int boucle = 0; // Position dans le tableau
+  while (fscanf(fichier, "%d ", &a) != EOF) {
+  image.pixel[boucle] = a;
+  printf("%ld\n", image.pixel[boucle]);
+  boucle++;
+
+}
+
 fclose(fichier);
   return 0;
 }
