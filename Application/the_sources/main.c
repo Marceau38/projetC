@@ -1,6 +1,7 @@
 #include "struct.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <p2.h>
 
 
 
@@ -55,15 +56,18 @@ printf("Vmax = %d\n", image.vmax);
 
 // On stocke toutes les données dans un tableau : pixel
 image.pixel = malloc(((image.largeur*3)*image.hauteur)*sizeof(uint64_t)); // Il y a largeur*3 nb/ligne et hauteur nb/colonne
-int a = 0; // Valeur à placer
+int k = 0; // Valeur à placer
 int boucle = 0; // Position dans le tableau
-  while (fscanf(fichier, "%d ", &a) != EOF) {
-  image.pixel[boucle] = a;
+int tab[3] = {0};
+  while (fscanf(fichier, "%d ", &k) != EOF) {
+  image.pixel[boucle] = k;
   printf("%ld\n", image.pixel[boucle]);
   boucle++;
-
 }
 
+
 fclose(fichier);
+//// On pose les valeurs de a , b, et c
+p3top2(image, 0.299, 0.587, 0.114);
   return 0;
 }
