@@ -1,6 +1,6 @@
 CC = gcc
 SRCS = %.c
-OBJS = main.o P2.o P1.o util.o
+OBJS = main.o P2.o P1.o util.o ecrire_fichier.o
 CFLAGS = -I ../the_headers
 
 all: main clean
