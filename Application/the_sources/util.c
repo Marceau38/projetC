@@ -70,9 +70,9 @@ struct structimg lectureFichier(FILE* fichier){
   while (fscanf(fichier, "%" SCNd64 " ", &rouge) != EOF) {
     fscanf(fichier, "%" SCNd64 " ", &vert);
     fscanf(fichier, "%" SCNd64 " ", &bleu);
-    k |= (bleu & 1B_MASK);
-    k |= (vert & 1B_MASK)<<DECAL_V;
-    k |= (rouge & 1B_MASK)<<DECAL_R;
+    k |= (bleu & B_MASK);
+    k |= (vert & B_MASK)<<DECAL_V;
+    k |= (rouge & B_MASK)<<DECAL_R;
     image.pixel[boucle] = k;
     //remise a 0 des variables de lecture
     rouge = 0; bleu = 0; vert = 0; k = 0;

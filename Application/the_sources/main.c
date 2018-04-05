@@ -10,7 +10,7 @@
 int main (int argc, char *argv[]) {
 
   int param_b = 0;
-  int param g = 0;
+  int param_g = 0;
   FILE *fichier = NULL;
   char *nomfichier = lignecommande(argc, argv, &param_b, &param_g, &fichier);
   struct structimg image = lectureFichier(fichier);
