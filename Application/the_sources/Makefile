@@ -6,7 +6,7 @@ CFLAGS = -I ../the_headers
 all: main clean
 
 main: $(OBJS)
-		$(CC) $(OBJS) -o $@ -lm
+		$(CC) $(OBJS) -o ../bin/$@ -lm
 
 %.o: %.c
 		$(CC) -o $@ -c $< $(CFLAGS) $(DEFINE)
