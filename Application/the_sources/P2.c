@@ -5,32 +5,25 @@
 #include "ecrire_fichier.h"
 
 struct structimg p3top2(struct structimg p3, float a, float b, float c, char* nom_fichier){
-    struct structimg p2;
-    p2.typeimg = P2;
-  //  printf("P : %d\n", p2.typeimg);
-    p2.largeur = p3.largeur;
-  //  printf("Largeur : %d\n", p2.largeur);
-    p2.hauteur = p3.hauteur;
-  //  printf("Hauteur : %d\n", p2.hauteur);
-    p2.vmax = p3.vmax;
-  //  printf("vmax : %d\n", p2.vmax);
-  //  p2.pixel
+    struct structimg p2; // Création de la structure stockant l'image binaire
+    p2.typeimg = P2; // Le type de l'image est P2
+    p2.largeur = p3.largeur; // La largeur et la hauteur restent la même
+    p2.hauteur = p3.hauteur; // Il y a autant de pixel qu'avant
+    p2.vmax = p3.vmax; // vmax vaut le meme que P3 puisque la valeur max est 255. Le niveau de gris est défini entre 0 et 255
 
-p2.pixel = malloc(((p2.largeur)*p2.hauteur)*sizeof(uint64_t));
-for (int j = 0; j < (p3.largeur*3)*(p3.hauteur) ; j = j+3) {
+p2.pixel = malloc(((p2.largeur)*p2.hauteur)*sizeof(uint64_t)); // On alloue un tableau d'uint64_t
+for (int j = 0; j < (p3.largeur)*(p3.hauteur) ; j++) { // Boucle parcourant chaque pixel
   uint64_t pixel = 0;
-    for (int i = 0; i < 3; i++) {
-      if (i == 0) {pixel += (uint64_t)(a*p3.pixel[j+i]);} // Multiplier par le coeff a
-      if (i == 1) {pixel += (uint64_t)(b*p3.pixel[j+i]);} // Multiplier par le coeff b
-      if (i == 2) {pixel += (uint64_t)(c*p3.pixel[j+i]);} // Multiplier par le coeff c
-}
-      p2.pixel[j/3] = pixel;
-    //  printf("P2 = %ld\n", p2.pixel[j/3] );
-    }
-    //printf("%d %d %d\n", (int)(p3.pixel[0]*a), (int)(p3.pixel[1]*b), (int)(p3.pixel[2]*c));
-    //int pixel = (int)(a*p3.pixel[0]) + (int)(b*p3.pixel[1]) + (int)(c*p3.pixel[2]);
-  //  printf("P2 : %d\n", pixel);
+  //printf("test\n");
+  //  for (int i = 0; i < 3; i++) { // Boucle parcourant les 3 couleurs de chaque pixel
+      pixel += (uint64_t)(a*(p3.pixel[j]&0x00FF0000>>16)); // Multiplier par le coeff a Rouge
+      pixel += (uint64_t)(b*(p3.pixel[j]&0x0000FF00>>8)); // Multiplier par le coeff b Vert
+      pixel += (uint64_t)(c*(p3.pixel[j]&0x000000FF)); // Multiplier par le coeff c Bleu
+//}
+      p2.pixel[j] = pixel; // Tous les 3 pixels de P3, on ne veut qu'1 pixel dans P1
 
-  write_file(p2, nom_fichier);
-    return p2;
+    }
+
+  write_file(p2, nom_fichier); // Fonction qui écrit la structure dans un fichier
+  return p2;
 }
