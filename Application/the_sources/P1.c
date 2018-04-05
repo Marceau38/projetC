@@ -5,6 +5,10 @@
 #include <math.h>
 #include "ecrire_fichier.h"
 
+#define R_MASK (0x00FF0000)
+#define V_MASK (0x0000FF00)
+#define B_MASK (0x000000FF)
+
 struct structimg p3top1(struct structimg p3, char* nom_fichier){
 
     // On choisit une valeur alpha :
@@ -19,9 +23,10 @@ struct structimg p3top1(struct structimg p3, char* nom_fichier){
     p1.pixel = malloc(((p1.largeur)*p1.hauteur)*sizeof(uint64_t)); // On alloue un tableau d'uint64_t
     // On calcule val :
     int vmax_cube = (int)pow(p3.vmax, 3);
+    float val;
     for (int j = 0; j < (p3.largeur)*(p3.hauteur) ; j++) {
-      float val = ((p3.pixel[j]&0x00FF0000>>16) * (p3.pixel[j]&0x0000FF00>>8) * (p3.pixel[j]&0x000000FF))/(float)vmax_cube;
-      p1.pixel[j] = (val < alpha) ? 1 : 0; // Tous les 3 pixels de P3, on ne veut qu'1 pixel dans P1
+      val = ((p3.pixel[j]&R_MASK>>16) * (p3.pixel[j]&V_MASK>>8) * (p3.pixel[j]&B_MASK))/(float)vmax_cube;
+      p1.pixel[j] = (val < alpha) ? 1 : 0; // On enregistre la valeur du pixel
         }
 
     write_file(p1, nom_fichier); // Fonction qui écrit la structure dans un fichier
