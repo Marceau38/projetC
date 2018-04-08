@@ -7,13 +7,14 @@
 #define B_MASK (0x000000FF)
 #define DECAL_R (16)
 #define DECAL_V (8)
-#define DEFAULT_PATH ("../bin/image.ppm")
+#define DEFAULT_PATH ("../bin/images.ppm")
 
 //return le nom du fichier ou le nom du fichier par défaut si il n'y a pas de fichier en arguments
 char *lignecommande(int argc, char *argv[], int* b, int* g, FILE **fichier) {
   // Faire un tableau des options
   // Si nom de fichier et réussi à ouvrir : pointeur
   char *nomfichier;
+  printf("%d\n", argc);
   for (int i = 1; i < argc; i++) {
     if (strcmp(argv[i], "-g") == 0){
       *g = 1;
@@ -22,15 +23,24 @@ char *lignecommande(int argc, char *argv[], int* b, int* g, FILE **fichier) {
        *b = 1;
      }
      else {
+       printf("testelse\n");
        *fichier = fopen(argv[i], "r");
-        nomfichier = argv[i];
+      nomfichier = argv[i];
      }
-  }
+   }
+     if (*fichier == NULL) {
+       printf("test\n");
+       *fichier = stdin;
+       nomfichier = DEFAULT_PATH;
+       printf("%s\n", nomfichier);
+     }
   //si on a pas de nom de fichier, on redirige vers l'entrée standard.
-  if (nomfichier == NULL) {
+/*  if (nomfichier == NULL) {
+      printf("test\n");
     *fichier = stdin;
     nomfichier = DEFAULT_PATH;
   }
+  */
   return nomfichier;
 }
 
@@ -41,6 +51,7 @@ struct structimg lectureFichier(FILE* fichier){
   fgets(type, 3, fichier);
   if (type[1] == '3') {
   image.typeimg = P3;
+  printf("test fichier\n");
   }
   else if (type[1] == '2') {
     image.typeimg = P2;
@@ -55,9 +66,11 @@ struct structimg lectureFichier(FILE* fichier){
 
   // On stocke maintenant le nombre de Colonnes et de Lignes :
   fscanf(fichier, "%d %d", &image.largeur, &image.hauteur);
+  printf("%d %d\n", image.largeur, image.hauteur);
 
   // On stocke Vmax :
   fscanf(fichier, "%d", &image.vmax);
+  printf("%d %d %d\n", image.largeur, image.hauteur, image.vmax);
 
   // On stocke toutes les données dans un tableau : pixel
   image.pixel = malloc(((image.largeur)*image.hauteur)*sizeof(uint64_t)); // Il y a largeur nbLigne et hauteur nbColonne
@@ -74,6 +87,7 @@ struct structimg lectureFichier(FILE* fichier){
     k |= (vert & B_MASK)<<DECAL_V;
     k |= (rouge & B_MASK)<<DECAL_R;
     image.pixel[boucle] = k;
+    printf("pixel %ld\n", k);
     //remise a 0 des variables de lecture
     rouge = 0; bleu = 0; vert = 0; k = 0;
     boucle++;
