@@ -1,3 +1,4 @@
+//DECAMPS Marceau, LAGRANGE Nathan : Binome 4
 #include <stdint.h>
 
 typedef enum type type;

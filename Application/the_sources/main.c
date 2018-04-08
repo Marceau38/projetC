@@ -1,3 +1,4 @@
+//DECAMPS Marceau, LAGRANGE Nathan : Binome 4
 #include "struct.h"
 #include <stdio.h>
 #include <inttypes.h>
@@ -8,7 +9,6 @@
 
 
 int main (int argc, char *argv[]) {
-
   int param_b = 0;
   int param_g = 0;
   FILE *fichier = NULL;

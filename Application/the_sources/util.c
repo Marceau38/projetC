@@ -1,3 +1,4 @@
+//DECAMPS Marceau, LAGRANGE Nathan : Binome 4
 #include "struct.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,40 +8,45 @@
 #define B_MASK (0x000000FF)
 #define DECAL_R (16)
 #define DECAL_V (8)
-#define DEFAULT_PATH ("../bin/images.ppm")
+#define DEFAULT_PATH ("../../Exemples/image.ppm")
 
 //return le nom du fichier ou le nom du fichier par défaut si il n'y a pas de fichier en arguments
 char *lignecommande(int argc, char *argv[], int* b, int* g, FILE **fichier) {
   // Faire un tableau des options
   // Si nom de fichier et réussi à ouvrir : pointeur
   char *nomfichier;
-  printf("%d\n", argc);
+  *b = *g = 0;
   for (int i = 1; i < argc; i++) {
-    if (strcmp(argv[i], "-g") == 0){
-      *g = 1;
+    //si c'est un paramètre
+    if(argv[i][0] == '-'){
+      if (strcmp(argv[i], "-g") == 0){
+        *g += 1;
+      }
+      else if (strcmp(argv[i], "-b") == 0) {
+        *b += 1;
+      }
+      else{
+        printf("%s : bad argument\n", argv[i]);
+        exit(0);
+      }
     }
-     else if (strcmp(argv[i], "-b") == 0) {
-       *b = 1;
-     }
-     else {
-       printf("testelse\n");
-       *fichier = fopen(argv[i], "r");
+    //c'est le nom de fichier
+    else {
+      *fichier = fopen(argv[i], "r");
       nomfichier = argv[i];
-     }
-   }
-     if (*fichier == NULL) {
-       printf("test\n");
-       *fichier = stdin;
-       nomfichier = DEFAULT_PATH;
-       printf("%s\n", nomfichier);
-     }
+    }
+  }
+  //si il n'y a pas de parmètres
+  if(!*g && !*b){
+    printf("Au moins un paramètre -b ou -g et requis.\n");
+    exit(0);
+  }
   //si on a pas de nom de fichier, on redirige vers l'entrée standard.
-/*  if (nomfichier == NULL) {
-      printf("test\n");
+  if (argc - *b - *g == 1){  //si il n'y a pas de nom de fichier passé en paramètre (ancienement "nomfichier == NULL" mais bug constaté)
     *fichier = stdin;
     nomfichier = DEFAULT_PATH;
   }
-  */
+  
   return nomfichier;
 }
 
@@ -51,7 +57,6 @@ struct structimg lectureFichier(FILE* fichier){
   fgets(type, 3, fichier);
   if (type[1] == '3') {
   image.typeimg = P3;
-  printf("test fichier\n");
   }
   else if (type[1] == '2') {
     image.typeimg = P2;
@@ -66,11 +71,9 @@ struct structimg lectureFichier(FILE* fichier){
 
   // On stocke maintenant le nombre de Colonnes et de Lignes :
   fscanf(fichier, "%d %d", &image.largeur, &image.hauteur);
-  printf("%d %d\n", image.largeur, image.hauteur);
 
   // On stocke Vmax :
   fscanf(fichier, "%d", &image.vmax);
-  printf("%d %d %d\n", image.largeur, image.hauteur, image.vmax);
 
   // On stocke toutes les données dans un tableau : pixel
   image.pixel = malloc(((image.largeur)*image.hauteur)*sizeof(uint64_t)); // Il y a largeur nbLigne et hauteur nbColonne
@@ -78,7 +81,7 @@ struct structimg lectureFichier(FILE* fichier){
   uint64_t rouge = 0;//valeur de lecture de couleurs
   uint64_t vert = 0;//on peut réutiliser 3 fois la même variable pour optimiser l'espace mémoire
   uint64_t bleu = 0;//mais utiliser 1 variable/couleur est plus lisible.
-  int boucle = 0; // Position dans le tableau
+  int boucle = 0; // Position dans le tableau de pixels
   //lecture des couleurs tant qu'il y en a
   while (fscanf(fichier, "%" SCNd64 " ", &rouge) != EOF) {
     fscanf(fichier, "%" SCNd64 " ", &vert);
@@ -87,7 +90,6 @@ struct structimg lectureFichier(FILE* fichier){
     k |= (vert & B_MASK)<<DECAL_V;
     k |= (rouge & B_MASK)<<DECAL_R;
     image.pixel[boucle] = k;
-    printf("pixel %ld\n", k);
     //remise a 0 des variables de lecture
     rouge = 0; bleu = 0; vert = 0; k = 0;
     boucle++;

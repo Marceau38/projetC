@@ -1,3 +1,4 @@
+//DECAMPS Marceau, LAGRANGE Nathan : Binome 4
 #include "struct.h"
 #include <stdio.h>
 #include <stdlib.h>
